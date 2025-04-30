@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachable Machine Image Model</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Teachable Machine Image Model</h1>
+        <h2>What is this computer hardware?</h2>
+        <button type="button" onclick="init()">START</button>
+    </div>
+    <div id="webcam-container" class="webcam-container"></div>
+    <div id="label-container" class="label-container"></div>
+
+    <!-- TensorFlow.js and Teachable Machine libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+
+    <script type="text/javascript">
+        // the link to your model provided by Teachable Machine export panel
+const URL = "./my_model/";
+
+let model, webcam, labelContainer, maxPredictions;
+
+// Load the image model and setup the webcam
+async function init() {
+    const modelURL = URL + "model.json";
+    const metadataURL = URL + "metadata.json";
+
+    // Load the model and metadata
+    model = await tmImage.load(modelURL, metadataURL);
+    maxPredictions = model.getTotalClasses();
+
+    // Convenience function to setup a webcam
+    const flip = true; // whether to flip the webcam
+    webcam = new tmImage.Webcam(250, 250, flip); // width, height, flip
+    await webcam.setup(); // request access to the webcam
+    await webcam.play();
+    window.requestAnimationFrame(loop);
+
+    // Append webcam and labels to the DOM
+    document.getElementById("webcam-container").appendChild(webcam.canvas);
+    labelContainer = document.getElementById("label-container");
+
+    for (let i = 0; i < maxPredictions; i++) {
+    const labelDiv = document.createElement("div");
+    const labelText = document.createElement("span");
+    const progressBar = document.createElement("div");
+    const barFill = document.createElement("div");
+
+    labelText.className = "label-text";
+    progressBar.className = "progress-bar";
+    barFill.className = "bar-fill";
+
+    progressBar.appendChild(barFill);
+    labelDiv.appendChild(labelText);
+    labelDiv.appendChild(progressBar);
+    labelContainer.appendChild(labelDiv);
+}
+}
+
+// Continuous loop to update webcam and predictions
+async function loop() {
+    webcam.update(); // Update the webcam frame
+    await predict(); // Run prediction
+    window.requestAnimationFrame(loop);
+}
+
+// Run the webcam image through the model and update labels and bars
+async function predict() {
+    const prediction = await model.predict(webcam.canvas);
+
+    for (let i = 0; i < maxPredictions; i++) {
+        const classPrediction = `${prediction[i].className}: ${(
+            prediction[i].probability * 100
+        ).toFixed(2)}%`;
+
+        const labelDiv = labelContainer.childNodes[i];
+        const labelText = labelDiv.querySelector(".label-text");
+        const barFill = labelDiv.querySelector(".bar-fill");
+
+        // Update text and bar width
+        labelText.textContent = classPrediction;
+        barFill.style.width = `${prediction[i].probability * 100}%`;
+    }
+}
+    </script>
+</body>
+</html>

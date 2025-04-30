@@ -1,0 +1,103 @@
+/* Add some basic styling for your web app */
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+.header {
+    background-color: #fe72a9;
+    color: white;
+    padding: 10px 0;
+}
+
+h1 {
+    color:#ffdaed;
+}
+
+h2 {
+    color:#ffffff;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 20px 0;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #ffdb78;
+    color: #fe72a9;
+    font-weight: 700;
+    border: none;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #ffeebe;
+    color: #fe72a9;
+}
+
+.webcam-container {
+    margin-top: 20px;
+}
+
+.label-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.label-container div {
+    width: 270px; /* Wider label container */
+    text-align: left;
+    font-size: 10px;
+    font-weight: bold;
+    color: #333;
+    border-radius: 0px;
+    background-color: #f4f4f9;
+    padding: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Add a progress bar inside each label */
+.label-container div .progress-bar {
+    height: 10px; /* Smaller bar height */
+    border-radius: 0px;
+    margin-top: 5px;
+    background-color: #ffffff; /* Bar background */
+    overflow: hidden;
+    position: relative;
+}
+
+.label-container div .progress-bar .bar-fill {
+    height: 100%;
+    width: 0; /* Start with the bar width at 0 */
+    border-radius: 0px;
+    transition: width 0.3s ease; /* Smooth animation for bar growth */
+}
+
+/* Unique colors for each label */
+.label-container div:nth-child(1) .bar-fill {
+    background-color: #70d6ff; /* Light Blue for CPU */
+}
+
+.label-container div:nth-child(2) .bar-fill {
+    background-color: #ff70a6; /* Soft Pink for RAM */
+}
+
+.label-container div:nth-child(3) .bar-fill {
+    background-color: #ff9770; /* Light Orange for HDD */
+}
+
+.label-container div:nth-child(4) .bar-fill {
+    background-color: #90cf8e; /* Light Green for SSD */
+}
+
+.label-container div:nth-child(5) .bar-fill {
+    background-color: #ffd670; /* Light Yellow for GPU */
+}
